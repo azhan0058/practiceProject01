@@ -4,6 +4,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.example.demo.dto.UserResponseDto;
+import com.example.demo.dto.UserSignupRequestDTO;
 import com.example.demo.entity.User;
 import com.example.demo.service.UserService;
 
@@ -34,7 +35,7 @@ public class UserController{
 
 
     @PostMapping("/signUp")
-    public ResponseEntity<User> signUpUser(@RequestBody User user) {
+    public ResponseEntity<User> signUpUser(@RequestBody UserSignupRequestDTO user) {
         User createdUser= userService.createUser(user);
         return ResponseEntity.status(HttpStatus.CREATED).body(createdUser); 
     }

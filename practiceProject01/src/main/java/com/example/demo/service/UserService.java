@@ -8,7 +8,9 @@ import org.springframework.stereotype.Service;
 import org.springframework.web.server.ResponseStatusException;
 
 import com.example.demo.dto.UserResponseDto;
+import com.example.demo.dto.UserSignupRequestDTO;
 import com.example.demo.entity.User;
+import com.example.demo.mapper.UserMapper;
 import com.example.demo.repository.UserRepository;
 
 @Service
@@ -16,14 +18,18 @@ public class UserService {
         
         
     private final UserRepository userRepository;
-    public UserService(UserRepository userRepository) {
+    private final UserMapper userMapper;
+    public UserService(UserRepository userRepository, UserMapper userMapper) {
         this.userRepository = userRepository;
+        this.userMapper = userMapper;
     }
+    
 
-    public User createUser(User user) {
-        if(user == null) {
+    public User createUser(UserSignupRequestDTO userDTO) {
+        if(userDTO == null) {
             throw new ResponseStatusException(HttpStatus.BAD_REQUEST,"User can't be null");
         }
+        User user = userMapper.toEntity(userDTO);
         return userRepository.save(user);
     }
 

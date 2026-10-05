@@ -1,11 +1,7 @@
 package com.example.demo.dto;
+import lombok.Data;
 
-/**
- * UserSignupRequestDTO
- *
- **/
-
-
+@Data 
 public class UserSignupRequestDTO {
    private String name;
    private String email;
