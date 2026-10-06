@@ -1,5 +1,6 @@
 package com.example.demo.service;
 
+import java.time.LocalDateTime;
 import java.util.List;
 import java.util.Optional;
 
@@ -10,6 +11,7 @@ import org.springframework.web.server.ResponseStatusException;
 import com.example.demo.dto.UserResponseDto;
 import com.example.demo.dto.UserSignupRequestDTO;
 import com.example.demo.entity.User;
+import com.example.demo.enums.Role;
 import com.example.demo.mapper.UserMapper;
 import com.example.demo.repository.UserRepository;
 
@@ -30,6 +32,8 @@ public class UserService {
             throw new ResponseStatusException(HttpStatus.BAD_REQUEST,"User can't be null");
         }
         User user = userMapper.toEntity(userDTO);
+        user.setCreatedAt(LocalDateTime.now());
+        user.setRole(Role.valueOf("Member"));
         return userRepository.save(user);
     }
 
