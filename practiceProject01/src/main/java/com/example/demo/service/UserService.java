@@ -10,6 +10,7 @@ import org.springframework.web.server.ResponseStatusException;
 
 import com.example.demo.dto.UserResponseDto;
 import com.example.demo.dto.UserSignupRequestDTO;
+import com.example.demo.dto.UserSignupResponseDTO;
 import com.example.demo.entity.User;
 import com.example.demo.enums.Role;
 import com.example.demo.mapper.UserMapper;
@@ -27,14 +28,18 @@ public class UserService {
     }
     
 
-    public User createUser(UserSignupRequestDTO userDTO) {
+    public UserSignupResponseDTO createUser(UserSignupRequestDTO userDTO) {
         if(userDTO == null) {
             throw new ResponseStatusException(HttpStatus.BAD_REQUEST,"User can't be null");
         }
         User user = userMapper.toEntity(userDTO);
         user.setCreatedAt(LocalDateTime.now());
         user.setRole(Role.valueOf("Member"));
-        return userRepository.save(user);
+        userRepository.save(user);  //user saved into the db.
+        //map a response DTO
+        UserSignupResponseDTO response = userMapper.toResponseDto(user);
+        response.setJWT("wefhiwfwgfhdbbjvsui1391423y");
+        return response;
     }
 
     public List<UserResponseDto> getAllUser(){
