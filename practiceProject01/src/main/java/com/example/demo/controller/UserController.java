@@ -27,11 +27,10 @@ import org.springframework.web.bind.annotation.PutMapping;
 
 
 @RestController
-@RequestMapping("/v2/abc")
+@RequestMapping("/api/v1")
 public class UserController{
 
     private final UserService userService;
-
     public UserController(UserService userService) {
         this.userService = userService;
     }
@@ -45,18 +44,19 @@ public class UserController{
 
     @PostMapping("/login")
     public UserLoginResponseDTO loginUser(@RequestBody UserLoginRequestDTO user) {
-        return userService.loginUser(user); 
-        
-    }    
-
+        return userService.loginUser(user);   
+    }
+    
+    @PostMapping("/forgetPassword")
+    public void forgetPassword(@RequestBody User request){
+        String email = request.getEmail();
+        //userService.verifyEmail();
+    }
+    
+    //admin api
     @GetMapping("/user")
     public List<UserResponseDto> getAllUser() {
         return userService.getAllUser();
-    }
-
-    @GetMapping("/health")
-    public String health() {
-        return "This is health check";
     }
 
     @GetMapping("/user/{id}")
@@ -73,6 +73,12 @@ public class UserController{
     public User updateUserById(@PathVariable Long id, @RequestBody User user) {
         return userService.updateUser(id, user);
     }
+
+    @GetMapping("/health")
+    public String health() {
+        return "This is health check";
+    }
+
 
     
 }
