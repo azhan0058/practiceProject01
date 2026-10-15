@@ -8,6 +8,8 @@ import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 import org.springframework.web.server.ResponseStatusException;
 
+import com.example.demo.dto.UserLoginRequestDTO;
+import com.example.demo.dto.UserLoginResponseDTO;
 import com.example.demo.dto.UserResponseDto;
 import com.example.demo.dto.UserSignupRequestDTO;
 import com.example.demo.dto.UserSignupResponseDTO;
@@ -15,6 +17,8 @@ import com.example.demo.entity.User;
 import com.example.demo.enums.Role;
 import com.example.demo.mapper.UserMapper;
 import com.example.demo.repository.UserRepository;
+
+import jakarta.servlet.http.HttpServletResponse;
 
 @Service
 public class UserService {
@@ -32,15 +36,18 @@ public class UserService {
         if(userDTO == null) {
             throw new ResponseStatusException(HttpStatus.BAD_REQUEST,"User can't be null");
         }
+        if(userRepository.findByEmail(userDTO.getEmail()).isPresent()){
+            throw new ResponseStatusException(HttpStatus.BAD_REQUEST,"User Already Exist ");
+        }
         User user = userMapper.toEntity(userDTO);
         user.setCreatedAt(LocalDateTime.now());
         user.setRole(Role.valueOf("Member"));
         userRepository.save(user);  //user saved into the db.
         //map a response DTO
         UserSignupResponseDTO response = userMapper.toResponseDto(user);
-        response.setJWT("wefhiwfwgfhdbbjvsui1391423y");
         return response;
     }
+
 
     public List<UserResponseDto> getAllUser(){
         return userRepository.findProjectedBy();
@@ -81,12 +88,17 @@ public class UserService {
 
     }
 
-    public User loginUser(String email, String password){
-
-        User currentUser = userRepository.findByEmail(email).orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND,"User not found with email: " + email));       
-        if(!password.equals(currentUser.getPassword())) {
+    public UserLoginResponseDTO loginUser(UserLoginRequestDTO userDTO){
+        if(userDTO == null) {
+            throw new ResponseStatusException(HttpStatus.BAD_REQUEST,"User can't be null");
+        }
+        User currentUser = userRepository.findByEmail(userDTO.getEmail())
+                          .orElseThrow(()-> new ResponseStatusException(HttpStatus.BAD_REQUEST,"User not found with email "));
+        if(!userDTO.getPassword().equals(currentUser.getPassword())) {
             throw new ResponseStatusException(HttpStatus.UNAUTHORIZED,"Invalid Password " ); 
         }
-        return currentUser;
+        UserLoginResponseDTO response = userMapper.toLoginResponseDTO(currentUser);
+        response.setJwt("skabdvsvlbskd32432538561");
+        return response;
     }
 }

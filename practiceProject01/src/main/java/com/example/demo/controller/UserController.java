@@ -3,6 +3,8 @@ package com.example.demo.controller;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+import com.example.demo.dto.UserLoginRequestDTO;
+import com.example.demo.dto.UserLoginResponseDTO;
 import com.example.demo.dto.UserResponseDto;
 import com.example.demo.dto.UserSignupRequestDTO;
 import com.example.demo.dto.UserSignupResponseDTO;
@@ -41,10 +43,10 @@ public class UserController{
         return ResponseEntity.status(HttpStatus.CREATED).body(createdUser); 
     }
 
-    @GetMapping("/login")
-    public User loginUser(@RequestBody User user) {
-        User activeUser = userService.loginUser(user.getEmail(), user.getPassword());
-        return activeUser;
+    @PostMapping("/login")
+    public UserLoginResponseDTO loginUser(@RequestBody UserLoginRequestDTO user) {
+        return userService.loginUser(user); 
+        
     }    
 
     @GetMapping("/user")

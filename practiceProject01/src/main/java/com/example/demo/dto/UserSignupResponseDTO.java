@@ -13,5 +13,5 @@ public class UserSignupResponseDTO {
    private String password;
    private Role role;
    private LocalDateTime createdAt;
-   private String JWT = "123458432962560356205602";
+//    private String JWT = "123458432962560356205602";
 }

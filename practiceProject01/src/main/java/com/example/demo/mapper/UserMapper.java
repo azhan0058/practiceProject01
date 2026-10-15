@@ -3,6 +3,8 @@ import org.mapstruct.Mapper;
 import org.mapstruct.Mapping;
 import org.mapstruct.MappingConstants;
 
+import com.example.demo.dto.UserLoginRequestDTO;
+import com.example.demo.dto.UserLoginResponseDTO;
 import com.example.demo.dto.UserSignupRequestDTO;
 import com.example.demo.dto.UserSignupResponseDTO;
 import com.example.demo.entity.User;
@@ -18,5 +20,8 @@ public interface UserMapper {
     UserSignupRequestDTO toRequestDto(User entity);
 
     UserSignupResponseDTO toResponseDto(User entity);
+
+    //User toLoginEntity(UserLoginRequestDTO loginRequestDTO);
+    UserLoginResponseDTO toLoginResponseDTO(User entity);
 }
 
